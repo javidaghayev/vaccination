@@ -11,7 +11,7 @@
     <h3 class="text-center">
       <i class="fas fa-map-marker-alt"></i> Center List
     </h3>
-    <a href="#"><i class="fas fa-plus"></i> Create Center</a>
+    <a href="{% url 'center:create' %}"><i class="fas fa-plus"></i> Create Center</a>
   </div>
 
   <table class="table table-responsive table-hover">
@@ -26,7 +26,7 @@
       {% for object in centers %}
       <tr>
         <td>{{object.name|upper}}</td>
-        <td><a href="#" class="btn-sm btn-outline-primary">View Details</a></td>
+        <td><a href="{% url 'center:detail' object.pk %}" class="btn-sm btn-outline-primary">View Details</a></td>
       </tr>
       {% endfor %}
     </tbody>
