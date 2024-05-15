@@ -49,3 +49,16 @@ def update_center(request, pk):
         'form': CenterForm(instance=center)
     }
     return render(request, 'center/update_center.html', context)
+
+
+def delete_center(request, pk):
+    center = Center.objects.get(pk=pk)
+
+    if request.method == 'POST':
+        center.delete()
+        return HttpResponseRedirect(reverse('center:list'))
+    
+    context = {
+        'center': center
+    }
+    return render(request, 'center/delete_center.html', context)

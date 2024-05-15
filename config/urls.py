@@ -25,6 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
     path('center/', include(('center.urls'), namespace='center')),
+    path('vaccine/', include(('vaccin.urls'), namespace='vaccin')),
 ]
 
 urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
