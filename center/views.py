@@ -33,3 +33,19 @@ def create_center(request):
         'form': CenterForm()
     }
     return render(request, 'center/create_center.html', context)
+
+
+def update_center(request, pk):
+    center = Center.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = CenterForm(request.POST, instance=center)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('center:detail', kwargs= {'pk': center.pk}))
+        
+        return render(request, 'center/update_center.html', {'form': form})
+    
+    context = {
+        'form': CenterForm(instance=center)
+    }
+    return render(request, 'center/update_center.html', context)
