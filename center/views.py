@@ -1,8 +1,11 @@
+from typing import Any
+from django.db.models.query import QuerySet
 from django.shortcuts import render
-from .models import Center
+from .models import Center, Storage
 from center.forms import CenterForm
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
+from django.views import generic
 
 
 def center_list(request):
@@ -62,3 +65,29 @@ def delete_center(request, pk):
         'center': center
     }
     return render(request, 'center/delete_center.html', context)
+
+
+
+class StorageList(generic.ListView):
+    queryset = Storage.objects.all()
+    template_name = 'storage/storage_list.html'
+
+    def get_queryset(self):
+        return super().get_queryset().filter(center_id=self.kwargs['center_id'])
+    
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['center_id'] = self.kwargs['center_id']
+    #     return context
+
+
+class StorageDetail(generic.DetailView):
+    model = Storage
+    template_name = 'storage/storage_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['available_quantity'] = (self.object.total_quantity - self.object.booked_quantity)
+        return context
+    

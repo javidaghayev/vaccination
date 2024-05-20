@@ -10,4 +10,9 @@ urlpatterns = [
     path('update/<int:pk>/', views.update_center, name='update'),
     path('delete/<int:pk>/', views.delete_center, name='delete'),
 
+    ###Storage
+    path('<int:center_id>/storage/', views.StorageList.as_view(), name='storage_list'),
+    path('storage/<int:pk>', views.StorageDetail.as_view(), name='storage_detail'),
+    
+
 ]
