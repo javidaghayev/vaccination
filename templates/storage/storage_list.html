@@ -11,7 +11,7 @@
     <h3 class="text-center">
       <i class="fas fa-box"></i> Vaccine Storage List
     </h3>
-    <a href="#"><i class="fas fa-plus"></i> Create Storage</a>
+    <a href="{% url 'center:storage_create' center_id %}"><i class="fas fa-plus"></i> Create Storage</a>
   </div>
 
   <table class="table table-responsive table-hover text-center">
@@ -38,5 +38,6 @@
     </tbody>
     
   </table>
+  {% include 'components/paginator.html' %}
 </div>
 {% endblock content %}

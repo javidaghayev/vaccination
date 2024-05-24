@@ -13,6 +13,9 @@ urlpatterns = [
     ###Storage
     path('<int:center_id>/storage/', views.StorageList.as_view(), name='storage_list'),
     path('storage/<int:pk>', views.StorageDetail.as_view(), name='storage_detail'),
+    path('<int:center_id>/storage/create/', views.StorageCreate.as_view(), name='storage_create'),
+    path('storage/update/<int:pk>', views.StorageUpdate.as_view(), name='storage_update'),
+    path('storage/delete/<int:pk>', views.StorageDelete.as_view(), name='storage_delete'),
     
 
 ]
