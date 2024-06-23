@@ -9,8 +9,10 @@ from django.views import generic
 from django.core.paginator import Paginator
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
-
+@login_required
 def center_list(request):
     centers = Center.objects.all().order_by('-id')
     paginator = Paginator(centers, 4)
@@ -21,7 +23,7 @@ def center_list(request):
         }
     return render(request, 'center/center_list.html', context)
 
-
+@login_required
 def center_detail(request, pk):
     center = Center.objects.get(pk=pk)
     context = {
@@ -29,6 +31,9 @@ def center_detail(request, pk):
     }
     return render(request, 'center/center_detail.html', context)
 
+
+@login_required
+@permission_required('center.add_center', raise_exception=True)
 def create_center(request):
     if request.method == 'POST':
         form = CenterForm(request.POST)
@@ -44,7 +49,8 @@ def create_center(request):
     }
     return render(request, 'center/create_center.html', context)
 
-
+@login_required
+@permission_required('center.change_center', raise_exception=True)
 def update_center(request, pk):
     center = Center.objects.get(pk=pk)
     if request.method == 'POST':
@@ -60,7 +66,7 @@ def update_center(request, pk):
     }
     return render(request, 'center/update_center.html', context)
 
-
+@permission_required('center.delete_center', raise_exception=True)
 def delete_center(request, pk):
     center = Center.objects.get(pk=pk)
 
@@ -76,7 +82,9 @@ def delete_center(request, pk):
 
 
 
-class StorageList(generic.ListView):
+
+
+class StorageList(LoginRequiredMixin, generic.ListView):
     queryset = Storage.objects.all()
     template_name = 'storage/storage_list.html'
     ordering = ['-id']
@@ -91,7 +99,7 @@ class StorageList(generic.ListView):
         return context
 
 
-class StorageDetail(generic.DetailView):
+class StorageDetail(LoginRequiredMixin, generic.DetailView):
     model = Storage
     template_name = 'storage/storage_detail.html'
 
@@ -102,12 +110,12 @@ class StorageDetail(generic.DetailView):
         return context
     
 
-class StorageCreate(SuccessMessageMixin, generic.CreateView):
+class StorageCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, generic.CreateView):
     model = Storage
     form_class = StorageForm
     template_name = 'storage/storage_create.html'
     success_message = "Storage created successfully"
-    
+    permission_required = ('center.add_storage',)
 
     def get_form_kwargs(self): #diger secimleri yigisdirdi
         kwargs = super().get_form_kwargs()
@@ -126,10 +134,11 @@ class StorageCreate(SuccessMessageMixin, generic.CreateView):
 
 
 
-class StorageUpdate(generic.UpdateView):
+class StorageUpdate(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView):
     model = Storage
     form_class = StorageForm
     template_name = 'storage/storage_update.html'
+    permission_required = ('center.change_storage',)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -141,9 +150,10 @@ class StorageUpdate(generic.UpdateView):
 
 
 
-class StorageDelete(generic.DeleteView):
+class StorageDelete(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView):
     model = Storage
     template_name = 'storage/storage_delete.html'
+    permission_required = ('center.delete_storage',)
 
     def get_success_url(self):
         return reverse('center:storage_list', kwargs={'center_id': self.get_object().center.id})

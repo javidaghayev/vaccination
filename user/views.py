@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.contrib.auth import login as user_login, authenticate, logout as user_logout, update_session_auth_hash
-
+from django.contrib.auth.decorators import login_required
 
 
 def signup(request):
@@ -44,14 +44,14 @@ def login(request):
     return render(request, 'user/login.html', {'form': form})
 
 
-
+@login_required
 def logout(request):
     user_logout(request)
     messages.success(request, 'logged out successfully ')
     return HttpResponseRedirect(reverse('user:login'))
 
 
-
+@login_required
 def change_password(request):
     if request.method == 'POST':
         form = ChangePasswordForm(request.user, request.POST)
@@ -69,7 +69,7 @@ def change_password(request):
     return render(request, 'user/change_password.html', context)
 
 
-
+@login_required
 def profile_view(request):
     context = {
         'user': request.user
@@ -77,7 +77,7 @@ def profile_view(request):
     return render(request, 'user/profile_view.html', context)
 
 
-
+@login_required
 def profile_update(request):
     if request.method == 'POST':
         form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user)
@@ -92,3 +92,4 @@ def profile_update(request):
         'form': ProfileUpdateForm(instance=request.user)
     }
     return render(request, 'user/profile_update.html', context)
+

@@ -11,6 +11,8 @@ urlpatterns = [
     path('center/', include(('center.urls'), namespace='center')),
     path('vaccine/', include(('vaccin.urls'), namespace='vaccin')),
     path('accounts/', include(('user.urls'), namespace='user')),
+    path('campaign/', include(('campaign.urls'), namespace='campaign')),
+    path('vaccination/', include(('vaccination.urls'), namespace='vaccination')),
 ]
 
 
