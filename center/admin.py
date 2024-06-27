@@ -1,6 +1,17 @@
 from django.contrib import admin
 from .models import *
 
-admin.site.register(Center)
-admin.site.register(Storage)
+
+
+class StorageInline(admin.TabularInline):
+    model = Storage
+
+
+class CustomCenter(admin.ModelAdmin):
+    inlines = [StorageInline]
+    # search_fields = []
+
+
+admin.site.register(Center, CustomCenter)
+
 

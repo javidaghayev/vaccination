@@ -16,3 +16,5 @@ class VaccinationForm(forms.ModelForm):
             'campaign': 'Vaccine / Center Name',
             'slot': 'Date / Slot',
         }
+
+
